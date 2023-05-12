@@ -1,13 +1,13 @@
 class Solution {
 public:
     long long mostPoints(vector<vector<int>>& questions) {
-        int n = questions.size();
-        vector<long long> dp(n + 1);
-        for (int i = 0; i < n; i++) {
-            dp[i+1] = max(dp[i+1], dp[i]);
-            int j = min(n, i + 1 + questions[i][1]);
-            dp[j] = max(dp[j], dp[i] + questions[i][0]);
+        int numQuestions = questions.size();
+        vector<long long> maxPointsAtQuestion(numQuestions + 1); // initialize dynamic programming array
+        for (int i = 0; i < numQuestions; i++) { // loop through each question
+            maxPointsAtQuestion[i+1] = max(maxPointsAtQuestion[i+1], maxPointsAtQuestion[i]); // update dp if skipping current question results in more points
+            int maxPossibleIndex = min(numQuestions, i + 1 + questions[i][1]); // calculate maximum possible index of last question that can be answered after current question
+            maxPointsAtQuestion[maxPossibleIndex] = max(maxPointsAtQuestion[maxPossibleIndex], maxPointsAtQuestion[i] + questions[i][0]); // update dp if solving current question results in more points
         }
-        return dp[n];
+        return maxPointsAtQuestion[numQuestions]; // return maximum points that can be earned
     }
 };
